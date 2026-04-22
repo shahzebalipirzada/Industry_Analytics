@@ -6,7 +6,7 @@ import sqlite3
 import time
 import os
 
-class Response:
+class Request:
     os = None
     cookie = None
     expiry = None
