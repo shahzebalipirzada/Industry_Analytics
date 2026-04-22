@@ -1,86 +1,151 @@
-import platform
-import json 
+import asyncio
+from playwright.async_api import async_playwright
 from pathlib import Path
-import shutil
-import sqlite3
-import time
-import os
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+output_folder = BASE_DIR / "files" / "html_files"
+output_folder.mkdir(parents=True, exist_ok=True)
+
+
 
 class Request:
-    os = None
-    cookie = None
-    expiry = None
-    conf_file = None
-    conf_path = Path(__file__).parent / 'files' / 'configuration.json'
+    
+          
+    async def auto_scroll(self,page):
+            await page.evaluate(
+                '''
+                window.scrollTo(
+                    {
+                        top:document.body.scrollHeight,
+                        behavior: 'smooth'
+                    }
+                )
+                '''
+            )
 
-    def __init__(self):
-        with open(self.conf_path, "r") as file:
-            self.conf_file = json.load(file)
-            
-        try:
-            self.os  = self.conf_file["os"]
-            self.cookie = self.conf_file["cookie"]
-            self.expiry = self.conf_file["expiry"]
+    async def search_to_html(self,search_keyword,no_pages):
+          
+          async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=False)
+                context = await browser.new_context()
 
-            now = time.time()
-            if now > self.expiry:
-                self.set_cookies()
+                #going to linkedin page:
+                page = await context.new_page()
+                await page.goto("https://linkedin.com")
 
-        except KeyError:
-            self.set_os()
-            self.set_cookies()    
+                #add cookies to the page:
 
-
-    def set_os(self):
-        # find os
-        self.os = platform.system()
-
-        # update os in file 
-        with open(self.conf_path, "r") as file:
-            conf_file = json.load(file)
-
-        conf_file["os"] = self.os
-
-        with open(self.conf_path, "w") as file:
-            json.dump(conf_file, file)
+                await context.add_cookies([
+                      {
+                            "name":"li_at",
+                            "value":"AQEDAWb3r48FaRSuAAABnabqsnsAAAGdyvc2e04AtrmxlvvPirBcgamYLpkVJAFJFXVc7PeFZ6tUFtf8NdWQ-bJ3TVTNDgcqTGZoOq0eJmzqVktqsdn6Dklnbwq5gE2sbfS-u6m-US4v0d2L1Zivkf7J",
+                            "domain":"www.linkedin.com",
+                            "path":"/"
+                      }
+                ])
 
 
+                #reload page after cookies setup:
 
-    def set_cookies(self):
-        # find cookie
-        if self.os == "Linux":
-            source = f"/home/{os.getenv('USER')}/snap/firefox/common/.mozilla/firefox/9v6m6flb.default/cookies.sqlite"
-            
-        elif self.os == "Windows":
-            source = "C:\Users\%USERNAME%\AppData\Roaming\Mozilla\Firefox\Profiles\4snz9eyi.default-release\cookies.sqlite" 
-        
-        destination = Path(__file__).parent / 'files' / 'configuration.json'
-        shutil.copy(source, destination)
+                await page.reload()
+
+                #wait till dom content is loaded:
+                await page.wait_for_load_state("domcontentloaded")
+
+                keyword = search_keyword
+                
+                #searching keyword:
+                search_box = page.locator('[data-testid="typeahead-input"]')
+                await search_box.click()
+                await search_box.fill(keyword)
+
+                await search_box.press("Enter")
+
+                #wait till searched page loaded:
+                await page.wait_for_load_state("domcontentloaded")
+
+                #click the people button:
+                people_btn = page.get_by_role("button",name="People")
+                await people_btn.click()
+
+                #scroll page to down:
+                await self.auto_scroll(page)
 
 
-        # Read li_at
-        con =   sqlite3.connect(destination)
-        moz_cookie = con.execute("select expiry, value from moz_cookies where name = 'li_at';")
-        moz_cookie = moz_cookie.fetchone()
-        self.expiry = moz_cookie[0] 
-        self.cookie = moz_cookie[1]
+                #declare next page button:
+                next_btn = page.locator('button[aria-label="Next"]')
 
-        # update cookie in file 
-        with open(self.conf_path, "r") as file:
-            conf_file = json.load(file)
+                for i in range(no_pages):
+                    
+                    await page.wait_for_timeout(10000)
+                    await self.auto_scroll(page)
+                    content =  await page.content()
 
-        conf_file["expiry"] = self.expiry
-        conf_file["cookie"] = self.cookie
+                    file_path = output_folder / f"searched_page_{i+1}.html"
 
-        with open(self.conf_path, "w") as file:
-            json.dump(conf_file, file)
+                    with open(file_path,'w',encoding='utf-8') as file:
+                        file.write(content)
+                    await next_btn.click()
 
-    def get_os(self):
-        if self.os == None:
-            self.set_os()
-        return self.os
 
-    def get_cookies(self):
-        if self.cookie == None:
-            self.set_cookie()
-        return self.cookie
+                await page.pause()
+
+    async def link_to_html(self,page_link,page_no):
+          
+          async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=False)
+                context = await browser.new_context()
+
+                #going to linkedin page:
+                page = await context.new_page()
+                
+
+                #add cookies to the page:
+
+                await context.add_cookies([
+                      {
+                            "name":"li_at",
+                            "value":"AQEDAWb3r48FaRSuAAABnabqsnsAAAGdyvc2e04AtrmxlvvPirBcgamYLpkVJAFJFXVc7PeFZ6tUFtf8NdWQ-bJ3TVTNDgcqTGZoOq0eJmzqVktqsdn6Dklnbwq5gE2sbfS-u6m-US4v0d2L1Zivkf7J",
+                            "domain":"www.linkedin.com",
+                            "path":"/"
+                      }
+                ])
+                
+                await page.goto(page_link)
+
+                #reload page after cookies setup:
+
+                await page.reload()
+
+                #wait till dom content is loaded:
+                await page.wait_for_load_state("domcontentloaded")
+
+                await page.wait_for_timeout(10000)
+
+                #Scroll Page to Down:
+                await self.auto_scroll(page)
+
+                #get content from page:
+                content =  await page.content()
+                
+                #set file Name:
+                file_path = output_folder / f"link_page_{page_no}.html"
+
+                #write file
+                with open(file_path,'w',encoding='utf-8') as file:
+                    file.write(content)
+                    
+
+                
+
+                await page.pause()
+                      
+
+
+
+
+
+
+                
+    
