@@ -17,12 +17,3 @@ class Parse:
         data = sel.xpath(self.__data_locator).extract()
         data = pd.DataFrame(data)
         return data
-    
-
-
-with open("/home/muhammad/Downloads/index_1.html", 'r') as file:
-    html = file.read()
-parse = Parse()
-df = pd.DataFrame(parse.search(html))
-print(df)
-
