@@ -25,30 +25,30 @@ class Request:
             )
 
     async def search_to_html(self,search_keyword,no_pages):
-          
+          html_content = []
           async with async_playwright() as p:
                 browser = await p.chromium.launch(headless=False)
                 context = await browser.new_context()
 
                 #going to linkedin page:
                 page = await context.new_page()
-                await page.goto("https://linkedin.com")
+                
 
                 #add cookies to the page:
 
                 await context.add_cookies([
                       {
                             "name":"li_at",
-                            "value":"AQEDAWb3r48FaRSuAAABnabqsnsAAAGdyvc2e04AtrmxlvvPirBcgamYLpkVJAFJFXVc7PeFZ6tUFtf8NdWQ-bJ3TVTNDgcqTGZoOq0eJmzqVktqsdn6Dklnbwq5gE2sbfS-u6m-US4v0d2L1Zivkf7J",
+                            "value":"AQEDAWb3r48EVENyAAABnbS7st4AAAGd2Mg23k4AVlLf9djMl4-8dtxtrQ-fzzmJ95iHYySTNl6y0G7Go7v55_okeL0nd7U_nVuVKdV63f1Gl7CQ5n-jisQeFHTMro5l7s9j9DWTUpDtaw1jV8w_qbAj",
                             "domain":"www.linkedin.com",
                             "path":"/"
                       }
                 ])
 
+                await page.goto("https://linkedin.com")
 
-                #reload page after cookies setup:
 
-                await page.reload()
+               
 
                 #wait till dom content is loaded:
                 await page.wait_for_load_state("domcontentloaded")
@@ -61,7 +61,7 @@ class Request:
                 await search_box.fill(keyword)
 
                 await search_box.press("Enter")
-
+                await page.wait_for_timeout(10000)
                 #wait till searched page loaded:
                 await page.wait_for_load_state("domcontentloaded")
 
@@ -81,7 +81,7 @@ class Request:
                     await page.wait_for_timeout(10000)
                     await self.auto_scroll(page)
                     content =  await page.content()
-
+                    html_content.append(content)
                     file_path = output_folder / f"searched_page_{i+1}.html"
 
                     with open(file_path,'w',encoding='utf-8') as file:
@@ -89,7 +89,8 @@ class Request:
                     await next_btn.click()
 
 
-                await page.pause()
+                browser.close()
+                return html_content
 
     async def link_to_html(self,page_link,page_no):
           
@@ -106,17 +107,17 @@ class Request:
                 await context.add_cookies([
                       {
                             "name":"li_at",
-                            "value":"AQEDAWb3r48FaRSuAAABnabqsnsAAAGdyvc2e04AtrmxlvvPirBcgamYLpkVJAFJFXVc7PeFZ6tUFtf8NdWQ-bJ3TVTNDgcqTGZoOq0eJmzqVktqsdn6Dklnbwq5gE2sbfS-u6m-US4v0d2L1Zivkf7J",
+                            "value":"AQEDAWb3r48EVENyAAABnbS7st4AAAGd2Mg23k4AVlLf9djMl4-8dtxtrQ-fzzmJ95iHYySTNl6y0G7Go7v55_okeL0nd7U_nVuVKdV63f1Gl7CQ5n-jisQeFHTMro5l7s9j9DWTUpDtaw1jV8w_qbAj",
                             "domain":"www.linkedin.com",
                             "path":"/"
                       }
                 ])
                 
-                await page.goto(page_link)
-
+                # await page.goto(page_link)
+                await page.goto(page_link, timeout=60000, wait_until="domcontentloaded")
                 #reload page after cookies setup:
 
-                await page.reload()
+                # await page.reload()
 
                 #wait till dom content is loaded:
                 await page.wait_for_load_state("domcontentloaded")
@@ -139,7 +140,8 @@ class Request:
 
                 
 
-                await page.pause()
+                await browser.close()
+                return content
                       
 
 
