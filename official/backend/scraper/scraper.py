@@ -1,14 +1,9 @@
-import utils.Request as req
-import utils.Parse as parse
 import asyncio
+import utils.Spider as Spider
 
+async def scraper():
+    async with Spider.Spider() as spider:
+        links = await spider.collect_links("IBA Sukkur", 100)
+        await spider.collect_education(links)
 
-addons = ["details\education","details\experience","details\certifications"]
-link = "https://www.linkedin.com/in/sher-muhammad-daudpota/"
-
-res = req.Request()
-pr =  parse.Parse()
-education_html = asyncio.run(res.link_to_html(link + addons[2],1))
-data  = pr.education(education_html)
-print(data.to_string())
-
+asyncio.run(scraper())
