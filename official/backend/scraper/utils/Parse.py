@@ -2,43 +2,46 @@ from scrapy import Selector
 import pandas as pd
 
 class Parse:
-    __links_locator = "//div[contains(@class,'search-marvel-srp')]//div[contains(@class,'display-flex align-items-center')]/a/@href"
-    
-    __education_date = "//div[@data-component-type = 'LazyColumn']//a[contains(@href, '/school/')]/div/p/text()"
-    __education_school = "//div[@data-component-type = 'LazyColumn']//a[contains(@href, '/school/')]/div/div/div/p[0]/text()"
-    __education_degree = "//div[@data-component-type = 'LazyColumn']//a[contains(@href, '/school/')]/div/div/div/p[1]/text()"
 
+    __links_xpath = "//div[contains(@class,'search-marvel-srp')]//div[contains(@class,'display-flex align-items-center')]/a/@href"
+    
+    __education_xpath = "//div[@data-component-type = 'LazyColumn']//div[contains(@componentkey,'entity-collection-item')]"
+
+    __education_xpath = {
+        "block" : "//div[@data-component-type = 'LazyColumn']//div[contains(@componentkey,'entity-collection-item')]",
+
+        "school" : ".//a[contains(@href, 'https://www.linkedin.com/school/')]/div/div/div/p[1]/text()",
+        "degree" : ".//a[contains(@href, 'https://www.linkedin.com/school/')]/div/div/div/p[2]/text()",
+        "date"   : ".//a[contains(@href, 'https://www.linkedin.com/school/')]/div/p/text()"
+
+    }
 
     def search(self, html):
         sel = Selector(text = html)
-        links = sel.xpath(self.__links_locator).extract()
-        links = pd.DataFrame(
-            {
-                "links" : links
-            }
-        )
+        links = sel.xpath(self.__links_xpath).extract()
+        links = pd.DataFrame({  "links" : links  })
         links = links["links"].str.extract(r'(h[^?]*)')
         return links
     
     def education(self, html):
         sel = Selector(text = html)
-        date = sel.xpath(self.__education_date).extract()
-        school = sel.xpath(self.__education_school).extract()
-        degree = sel.xpath(self.__education_degree).extract()
-        print(date)
-        print(school)
-        print(degree)
-        return None
+        blocks = sel.xpath(self.__education_xpath["block"])
+        rows = []
+
+        for block in blocks:
+            school = block.xpath(self.__education_xpath["school"]).get()
+            degree = block.xpath(self.__education_xpath["degree"]).get()
+            date = block.xpath(self.__education_xpath["date"]).get()
+
+            row = {
+                "school" : school if school != None else None,
+                "degree" : degree if degree != None else None,
+                "date"   : date   if date   != None else None
+            }
+            rows.append(row)
+
+        df = pd.DataFrame(rows, columns=["date", "school", "degree"])
+        df = df.drop_duplicates()
+        df = df.dropna(how="all") 
+        return df
     
-
-
-
-# with open("file.html", "r", encoding="utf-8") as file:
-#     html = file.read()
-
-
-# print(html)
-
-# pr = Parse()
-# links = pr.search(html)
-# print(links)
