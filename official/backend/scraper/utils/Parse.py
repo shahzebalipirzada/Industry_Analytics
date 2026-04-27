@@ -9,7 +9,7 @@ class Parse:
     __links_xpath     = "//div[contains(@class,'search-marvel-srp')]//div[contains(@class,'display-flex align-items-center')]/a/@href"
     
     __education_xpath = {
-        "block" : "//div[@data-component-type = 'LazyColumn']//div[contains(@componentkey,'entity-collection-item')]",
+        "block" : "//div[@data-component-type = 'LazyColumn']//div[contains(@componentkey, '')]",
 
         "school" : ".//a[contains(@href, 'https://www.linkedin.com/school/')]/div/div/div/p[1]/text()",
         "degree" : ".//a[contains(@href, 'https://www.linkedin.com/school/')]/div/div/div/p[2]/text()",
@@ -49,10 +49,13 @@ class Parse:
             }
             records.append(education_records)
 
+        print(records)
+
         education_records = pd.DataFrame(records, columns=["date", "school", "degree"])
         education_records = education_records.drop_duplicates()
         education_records = education_records.dropna(how="all") 
         education_records = education_records.to_dict(orient="records")
+        print(education_records)
 
         self.__store_education(education_records, url)
 

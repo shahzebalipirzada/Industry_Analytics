@@ -1,92 +1,151 @@
-<!DOCTYPE html><html data-l10n-sync="true" lang="en-US" dir="ltr"><head>
-    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'">
-    <meta name="color-scheme" content="light dark">
-    <title data-l10n-id="neterror-page-title">Problem loading page</title>
-    <link rel="stylesheet" href="chrome://global/skin/aboutNetError.css" type="text/css" media="all">
-    <link rel="icon" id="favicon" href="chrome://global/skin/icons/info.svg">
-    <link rel="localization" href="branding/brand.ftl">
-    <link rel="localization" href="toolkit/neterror/certError.ftl">
-    <link rel="localization" href="toolkit/neterror/netError.ftl">
-  </head>
-  <body class="neterror">
-    <div class="container">
-      <div id="text-container">
-        <!-- Error Title -->
-        <div class="title">
-          <h1 class="title-text" data-l10n-id="redirectLoop-title">The page isn’t redirecting properly</h1>
-        </div>
-
-        <!-- Short Description -->
-        <p id="errorShortDesc">Firefox has detected that the server is redirecting the request for this address in a way that will never complete.</p>
-        <p id="errorShortDesc2"></p>
-
-        <div id="errorWhatToDo" hidden="">
-          <p id="errorWhatToDoTitle" data-l10n-id="certerror-what-can-you-do-about-it-title">What can you do about it?</p>
-          <p id="badStsCertExplanation" hidden=""></p>
-          <p id="errorWhatToDoText"></p>
-        </div>
-
-        <!-- Long Description -->
-        <div id="errorLongDesc"><ul><li data-l10n-id="neterror-redirect-loop">This problem can sometimes be caused by disabling or refusing to accept cookies.</li></ul></div>
-
-        <div id="trrOnlyContainer" hidden="">
-          <p id="trrOnlyMessage"></p>
-          <div class="trr-message-container">
-            <span id="trrOnlyDescription"></span>
-            <p id="trrLearnMoreContainer" hidden="">
-              <a id="trrOnlylearnMoreLink" target="_blank" rel="noopener noreferrer" data-l10n-id="neterror-learn-more-link">Learn more…</a>
-            </p>
-          </div>
-          <p data-l10n-id="neterror-dns-not-found-trr-third-party-warning2">You can continue with your default DNS resolver. However, a third-party might be able to see what websites you visit.</p>
-        </div>
-
-        <p id="tlsVersionNotice" hidden=""></p>
-
-        <p id="learnMoreContainer" hidden="">
-          <a id="learnMoreLink" target="_blank" rel="noopener noreferrer" data-telemetry-id="learn_more_link" data-l10n-id="neterror-learn-more-link" href="https://support.mozilla.org/1/firefox/146.0.1/Linux/en-US/connection-not-secure">Learn more…</a>
-        </p>
-
-        <!-- UI for option to report certificate errors to Mozilla. Removed on
-             init for other error types .-->
-        <div id="prefChangeContainer" class="button-container" hidden="">
-          <p data-l10n-id="neterror-pref-reset">It looks like your network security settings might be causing this. Do you want the default settings to be restored?</p>
-          <button id="prefResetButton" class="primary" data-l10n-id="neterror-pref-reset-button">Restore default settings</button>
-        </div>
-
-        <div id="certErrorAndCaptivePortalButtonContainer" class="button-container" hidden="">
-          <button id="returnButton" class="primary" data-telemetry-id="return_button_top" data-l10n-id="neterror-return-to-previous-page-recommended-button">Go Back (Recommended)</button>
-          <button id="openPortalLoginPageButton" class="primary" data-l10n-id="neterror-open-portal-login-page-button" hidden="">Open Network Login Page</button>
-          <button id="certErrorTryAgainButton" class="primary try-again" data-l10n-id="neterror-try-again-button" hidden="">Try Again</button>
-          <button id="advancedButton" data-telemetry-id="advanced_button" data-l10n-id="neterror-advanced-button">Advanced…</button>
-        </div>
-      </div>
-
-      <div id="netErrorButtonContainer" class="button-container"><button id="neterrorTryAgainButton" class="primary try-again" data-l10n-id="neterror-try-again-button" data-telemetry-id="try_again_button">Try Again</button>
-        
-        <button id="trrExceptionButton" data-l10n-id="neterror-add-exception-button" data-telemetry-id="add_exception_button" hidden="">Always continue for this site</button>
-        <button id="trrSettingsButton" data-l10n-id="neterror-settings-button" data-telemetry-id="settings_button" hidden="">Change DNS settings</button>
-      </div>
-
-      <div class="advanced-panel-container">
-        <div id="badCertAdvancedPanel" class="advanced-panel" hidden="">
-          <p id="badCertTechnicalInfo"></p>
-          <a id="viewCertificate" href="javascript:void(0)" data-l10n-id="neterror-view-certificate-link">View Certificate</a>
-          <div id="advancedPanelButtonContainer" class="button-container">
-            <button id="advancedPanelReturnButton" class="primary" data-telemetry-id="return_button_adv" data-l10n-id="neterror-return-to-previous-page-recommended-button">Go Back (Recommended)</button>
-            <button id="advancedPanelTryAgainButton" class="primary try-again" data-l10n-id="neterror-try-again-button" hidden="">Try Again</button>
-            <button id="exceptionDialogButton" data-telemetry-id="exception_button" data-l10n-id="neterror-override-exception-button">Accept the Risk and Continue</button>
-          </div>
-        </div>
-
-        <div id="certificateErrorDebugInformation" class="advanced-panel" hidden="">
-          <button id="copyToClipboardTop" data-telemetry-id="clipboard_button_top" data-l10n-id="neterror-copy-to-clipboard-button">Copy text to clipboard</button>
-          <div id="certificateErrorText"></div>
-          <button id="copyToClipboardBottom" data-telemetry-id="clipboard_button_bot" data-l10n-id="neterror-copy-to-clipboard-button">Copy text to clipboard</button>
-        </div>
-      </div>
+<div class="_6332e0e5 _3c747953 _3440af21 _2e2c0603 f8305d2c c6d53bfb c0538486 _7ef8c619 _931795e3"
+  data-testid="profile_EducationDetailsSection_qamaruddin-maitlo-phd-5a027523" data-component-type="LazyColumn"
+  componentkey="com.linkedin.sdui.profile.card.refACoAAATYJAgBLLnGhmNcM480-WJ9ZOHDXwZ_ORAEducationDetailsSection">
+  <div class="ba1ffa57 _125f93bf e73fdec6"></div>
+  <div class="_23cd049b c6d53bfb _3ebad845 _4614c964 _088ee8f6 _8ee05fd8 _7ef8c619">
+    <div class="c6d53bfb _3ebad845 cdf83d5f _088ee8f6 _8ee05fd8 _7ef8c619"><a
+        class="_71ca96d2 cab1f813 e348bbba d2507fa5 _4e30e397 _03ffa0f1 d6acfda3 fc892648 eba0b1bd _872832d9 _81675407 _088ee8f6 _931795e3"
+        aria-disabled="false" href="https://www.linkedin.com/in/qamaruddin-maitlo-phd-5a027523/"
+        aria-label="Navigate back to profile main screen"><span
+          class="_10491b1e _0fe69825 _1336748b _088ee8f6 e348bbba d2507fa5 _81675407 _587c2e0d b80bbcb2 _03ffa0f1 d6acfda3 cc2c9d4d _6b0ef38d c4ea0d65 d7c024ec _8aeb3931 _28e94ebf _8b5c0404 _722d7e15 _716aac97 _907bb541"><svg
+            xmlns="http://www.w3.org/2000/svg" id="arrow-left-medium" fill="currentColor" aria-hidden="true"
+            data-rtl="true" data-supported-dps="24x24" viewBox="0 0 24 24" data-token-id="430" width="24" height="24"
+            class="_26d1c6b5 _32f1038e _17056ea8 b93e26de _1e891906 _40538161" role="img" aria-label="">
+            <path d="m9 4-4.87 7H22v2H4.13L9 20H6.56L1 12l5.56-8z"></path>
+          </svg></span></a>
+      <p
+        class="_885f3d1f _9a02ac65 fc40fd92 _849f3eb3 _9208c154 _9baf8e44 _03ffa0f1 _10611002 _35663b76 dc73b616 c0598fb9">
+        Education</p>
     </div>
-    <script src="chrome://global/content/neterror/aboutNetErrorCodes.js"></script>
-    <script type="module" src="chrome://global/content/aboutNetError.mjs"></script>
-  
-
-</body></html>
+  </div>
+  <div class="_6332e0e5 c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+    <div class="_7298faf8 c6d53bfb _3ebad845 cdf83d5f _5911038e ffba816a _7ef8c619"
+      componentkey="d928b465-f67c-4104-8c9c-31a0589f53cd">
+      <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+        <div class="_6332e0e5 c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _496e5631 ce8ca395">
+          <div class="babef92c c6d53bfb _3ebad845 cdf83d5f d86d691d _8ee05fd8 _7ef8c619 ce8ca395">
+            <a tabindex="0"
+              class="_3a116ece _87397b0b _25e1dea6 _985eca11 _3b1f9c3d f4da06e4 _687363e4 e8427d1b _5081076f e348bbba _4e30e397 b2b725c9 c6d53bfb"
+              href="https://www.linkedin.com/school/953450/">
+              <figure class="bc502659 _708bceca _29410584 _4d5a4d45 _1336748b _7fd51d05 _43a731e4 d8a6529b">
+                <svg xmlns="http://www.w3.org/2000/svg" id="school-accent-4" aria-hidden="false" viewBox="0 0 128 128"
+                  data-token-id="892" class="_6134000f b6ef5dda d8a6529b _43a731e4 _87b5e727" role="img"
+                  fetchPriority="low" aria-label="Wuhan University of Technology logo"
+                  preserveAspectRatio="xMidYMid slice">
+                  <g display="var(--svgDisplayLight)">
+                    <path fill="#e7e2dc" d="M0 0h128v128H0z"></path>
+                    <circle cx="40" cy="88" r="24" fill="#788fa5"></circle>
+                    <circle cx="72" cy="56" r="40" fill="#9eb3c8"></circle>
+                    <path fill="none" d="M0 0h128v128H0z"></path>
+                    <path fill="#56687a" d="M40 64a24.1 24.1 0 0 0-6.94 1A40 40 0 0 0 63 94.94 24 24 0 0 0 40 64">
+                    </path>
+                  </g>
+                  <g display="var(--svgDisplayDark)">
+                    <path fill="#38434f" d="M0 0h128v128H0z"></path>
+                    <circle cx="40" cy="88" r="24" fill="#788fa5"></circle>
+                    <circle cx="72" cy="56" r="40" fill="#9db3c8"></circle>
+                    <path fill="none" d="M0 0h128v128H0z"></path>
+                    <path fill="#56687a" d="M40 64a24.1 24.1 0 0 0-6.94 1A40 40 0 0 0 63 94.94 24 24 0 0 0 40 64">
+                    </path>
+                  </g>
+                </svg><img class="_6134000f b6ef5dda d8a6529b _43a731e4 _456b1f66" fetchpriority="low"
+                  alt="Wuhan University of Technology logo"
+                  src="https://media.licdn.com/dms/image/v2/C4E0BAQFvosCSar1hpA/company-logo_100_100/company-logo_100_100/0/1631342743657?e=1778716800&amp;v=beta&amp;t=VdJp01LBPBR4G0ZhI2a4jMddQJlbSsmi9k5D8eL4oEs"
+                  data-loaded="true">
+              </figure>
+            </a>
+            <div class="_6332e0e5 _1336748b f1b057bc c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+              <a tabindex="0"
+                class="_985eca11 _3b1f9c3d f4da06e4 _687363e4 e8427d1b _5081076f e348bbba _4e30e397 b2b725c9 c6d53bfb"
+                href="https://www.linkedin.com/school/953450/">
+                <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+                  <div class="c6d53bfb _3ebad845 cdf83d5f d86d691d _8ee05fd8 _7ef8c619 ce8ca395 _60c7d8ef">
+                    <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+                      <p class="_885f3d1f d8495941 _849f3eb3 _9208c154 _9baf8e44 _03ffa0f1 _10611002 _35663b76 dc73b616 c0598fb9 f7af8f95"
+                        style="--_38b9aaa4: var(--ceba4a0e); --d90d33dc: var(--a1e8bbe1); --_047cc442: var(--_34ec58cc);">
+                        Wuhan University of Technology</p>
+                      <p
+                        class="_885f3d1f _6d8ec3e6 _849f3eb3 _9208c154 d96bb891 b9d99cc7 _10611002 _35663b76 dc73b616 _86acfcc8">
+                        Doctor of Philosophy - PhD, HRM</p>
+                    </div>
+                  </div>
+                  <p
+                    class="_885f3d1f _6d8ec3e6 _849f3eb3 _9208c154 d96bb891 b9d99cc7 _10611002 d0607c05 dc73b616 _86acfcc8">
+                    2017 – Jun 2021</p>
+                </div>
+              </a>
+              <div class="_6332e0e5 c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c6d53bfb _3ebad845 cdf83d5f _088ee8f6 _8ee05fd8 af65e1a1"></div>
+    </div>
+    <hr role="presentation"
+      class="f638f79d _37f3eecd f4da06e4 _687363e4 e8427d1b _5081076f e348bbba f8c27258 _34306ea6 _6931336a fd0c541d">
+    <div class="_7298faf8 c6d53bfb _3ebad845 cdf83d5f _5911038e ffba816a _7ef8c619"
+      componentkey="cb6ad7b6-659d-49c7-8940-5f974ae45cf1">
+      <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+        <div class="_6332e0e5 c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _496e5631 ce8ca395">
+          <div class="babef92c c6d53bfb _3ebad845 cdf83d5f d86d691d _8ee05fd8 _7ef8c619 ce8ca395">
+            <a tabindex="0"
+              class="_3a116ece _87397b0b _25e1dea6 _985eca11 _3b1f9c3d f4da06e4 _687363e4 e8427d1b _5081076f e348bbba _4e30e397 b2b725c9 c6d53bfb"
+              href="https://www.linkedin.com/school/667986/">
+              <figure class="bc502659 _708bceca _29410584 _4d5a4d45 _1336748b _7fd51d05 _43a731e4 d8a6529b">
+                <svg xmlns="http://www.w3.org/2000/svg" id="school-accent-4" aria-hidden="false" viewBox="0 0 128 128"
+                  data-token-id="892" class="_6134000f b6ef5dda d8a6529b _43a731e4 _87b5e727" role="img"
+                  fetchPriority="low" aria-label="Institute of Business Administration logo"
+                  preserveAspectRatio="xMidYMid slice">
+                  <g display="var(--svgDisplayLight)">
+                    <path fill="#e7e2dc" d="M0 0h128v128H0z"></path>
+                    <circle cx="40" cy="88" r="24" fill="#788fa5"></circle>
+                    <circle cx="72" cy="56" r="40" fill="#9eb3c8"></circle>
+                    <path fill="none" d="M0 0h128v128H0z"></path>
+                    <path fill="#56687a" d="M40 64a24.1 24.1 0 0 0-6.94 1A40 40 0 0 0 63 94.94 24 24 0 0 0 40 64">
+                    </path>
+                  </g>
+                  <g display="var(--svgDisplayDark)">
+                    <path fill="#38434f" d="M0 0h128v128H0z"></path>
+                    <circle cx="40" cy="88" r="24" fill="#788fa5"></circle>
+                    <circle cx="72" cy="56" r="40" fill="#9db3c8"></circle>
+                    <path fill="none" d="M0 0h128v128H0z"></path>
+                    <path fill="#56687a" d="M40 64a24.1 24.1 0 0 0-6.94 1A40 40 0 0 0 63 94.94 24 24 0 0 0 40 64">
+                    </path>
+                  </g>
+                </svg><img class="_6134000f b6ef5dda d8a6529b _43a731e4 _456b1f66" fetchpriority="low"
+                  alt="Institute of Business Administration logo"
+                  src="https://media.licdn.com/dms/image/v2/D4D0BAQHbdEQNZRrKJA/company-logo_100_100/B4DZeC9fVnGgAU-/0/1750248847334/ibakhiofficial_logo?e=1778716800&amp;v=beta&amp;t=gwjfvvbD-hHUgxtgivcosHTbYqtT6dzmex2AsQ-NR0k"
+                  data-loaded="true">
+              </figure>
+            </a>
+            <div class="_6332e0e5 _1336748b f1b057bc c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+              <a tabindex="0"
+                class="_985eca11 _3b1f9c3d f4da06e4 _687363e4 e8427d1b _5081076f e348bbba _4e30e397 b2b725c9 c6d53bfb"
+                href="https://www.linkedin.com/school/667986/">
+                <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+                  <div class="c6d53bfb _3ebad845 cdf83d5f d86d691d _8ee05fd8 _7ef8c619 ce8ca395 _60c7d8ef">
+                    <div class="_6332e0e5 _1336748b c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+                      <p class="_885f3d1f d8495941 _849f3eb3 _9208c154 _9baf8e44 _03ffa0f1 _10611002 _35663b76 dc73b616 c0598fb9 f7af8f95"
+                        style="--_38b9aaa4: var(--ceba4a0e); --d90d33dc: var(--a1e8bbe1); --_047cc442: var(--_34ec58cc);">
+                        Institute of Business Administration</p>
+                      <p
+                        class="_885f3d1f _6d8ec3e6 _849f3eb3 _9208c154 d96bb891 b9d99cc7 _10611002 _35663b76 dc73b616 _86acfcc8">
+                        Master of Science (MS), HRM</p>
+                    </div>
+                  </div>
+                  <p
+                    class="_885f3d1f _6d8ec3e6 _849f3eb3 _9208c154 d96bb891 b9d99cc7 _10611002 d0607c05 dc73b616 _86acfcc8">
+                    2010 – 2013</p>
+                </div>
+              </a>
+              <div class="_6332e0e5 c6d53bfb c0538486 cdf83d5f d86d691d _8ee05fd8 _7ef8c619">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="c6d53bfb _3ebad845 cdf83d5f _088ee8f6 _8ee05fd8 af65e1a1"></div>
+    </div>
+  </div>
+</div>

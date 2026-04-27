@@ -136,6 +136,7 @@ class Request:
                 print("PROBABIIY: Slow network connection or server overload.")
 
             else:
-                print(f"An unexpected Playwright error occurred: {e.message}")                       
-            
+                print(f"An unexpected Playwright error occurred: {e.message}")   
+                                    
+        print(content)
         return content   
